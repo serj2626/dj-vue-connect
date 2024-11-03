@@ -1,76 +1,78 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <script lang="ts" setup>
-import axios from "axios";
-import PeopleYouMayKnow from "../components/PeopleYouMayKnow.vue";
-import Trends from "../components/Trends.vue";
-import { useToast } from "vue-toastification";
-import { FwbAlert } from "flowbite-vue";
-import { useUserStore } from "@/stores/user";
-import { onMounted, ref, watch, watchEffect } from "vue";
-import { useRoute } from "vue-router";
-import PostCard from "@/components/PostCard.vue";
-import ProfileCard from "@/components/ProfileCard.vue";
+import axios from 'axios'
+import PeopleYouMayKnow from '../components/PeopleYouMayKnow.vue'
+import Trends from '../components/Trends.vue'
+import { useToast } from 'vue-toastification'
+import { FwbAlert } from 'flowbite-vue'
+import { useUserStore } from '@/stores/user'
+import { ref, watchEffect } from 'vue'
+import { useRoute } from 'vue-router'
+import ProfileCard from '@/components/ProfileCard.vue'
+import type { IPostList, IUserData } from '@/types/types'
+import PostCard from '@/components/PostCard.vue'
 
-const route = useRoute();
-const toast = useToast();
-const userStore = useUserStore();
+const route = useRoute()
+const toast = useToast()
+const userStore = useUserStore()
 
-const posts = ref([]);
-const user = ref({});
+const posts = ref<IPostList[]>([])
+const user = ref({} as IUserData)
 
-const status = ref("");
+const status = ref<string>('')
 
-const body = ref("");
+const body = ref('')
 
 async function getFeed() {
   try {
-    const { data } = await axios.get(`/api/posts/profile/${route.params.id}/`);
-    posts.value = data.posts;
-    user.value = data.user;
-    status.value = data.status;
-    console.log(data);
+    const { data } = await axios.get(`/api/posts/profile/${route.params.id}/`)
+    posts.value = data.posts
+    user.value = data.user
+    status.value = data.status
+    console.log(data)
   } catch {
-    toast.error("Произошла ошибка при загрузке постов");
+    toast.error('Произошла ошибка при загрузке постов')
   }
 }
 
 const sendFriendRequest = async () => {
   try {
-    const res = await axios.post(`/api/friends/send-request/${user.id}`);
-    toast.success(res.data.message);
+    const res = await axios.post(`/api/friends/send-request/${user.id}`)
+    toast.success(res.data.message)
   } catch (e) {
-    toast.error(e.response.data.message);
+    toast.error(e.response.data.message)
   }
-};
+}
 
-const deletePost = async (id) => {
+const deletePost = async id => {
   try {
-    await axios.delete(`/api/posts/detail/${id}/`);
-    toast.success("Пост успешно удален");
-    await getFeed();
+    await axios.delete(`/api/posts/detail/${id}/`)
+    toast.success('Пост успешно удален')
+    await getFeed()
   } catch (error) {
-    toast.error("Произошла ошибка при удалении поста");
+    toast.error('Произошла ошибка при удалении поста')
   }
-};
+}
 
 const createPost = async () => {
-  if (body.value === "") {
-    toast.error("Форма не может быть пустой");
-    return;
+  if (body.value === '') {
+    toast.error('Форма не может быть пустой')
+    return
   } else {
     try {
-      await axios.post("/api/posts/", { body: body.value });
-      toast.success("Пост успешно создан");
-      body.value = "";
-      getFeed();
+      await axios.post('/api/posts/', { body: body.value })
+      toast.success('Пост успешно создан')
+      body.value = ''
+      getFeed()
     } catch {
-      toast.error("Произошла ошибка при создании поста");
+      toast.error('Произошла ошибка при создании поста')
     }
   }
-};
+}
 
 watchEffect(() => {
-  getFeed();
-});
+  getFeed()
+})
 </script>
 
 <template>
@@ -105,9 +107,13 @@ watchEffect(() => {
         </form>
       </div>
 
-      <div v-if="posts.length > 0" v-for="(post, index) in posts" :key="index">
-        <PostCard @delete="deletePost" :id="post.id" />
-      </div>
+      <PostCard
+        v-if="posts.length > 0"
+        v-for="(post, index) in posts"
+        :key="index"
+        @delete="deletePost"
+        :id="post.id"
+      />
 
       <fwb-alert v-else class="border-t-4 rounded-none" icon type="danger">
         Посты отсутствуют.
