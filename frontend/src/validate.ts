@@ -1,6 +1,6 @@
-import type { IRegisterForm } from './types/types'
+import type { IAuthForm } from './types/types'
 
-function validateRegisterData(form: IRegisterForm) {
+function validateRegisterData(form: IAuthForm) {
   if (
     form.email === '' ||
     form.name === '' ||
@@ -17,8 +17,15 @@ function validateRegisterData(form: IRegisterForm) {
   if (form.password !== form.password2) {
     throw new Error('Пароли не совпадают')
   }
-
-  return true
 }
 
-export { validateRegisterData }
+function validateLoginData(form: IAuthForm) {
+  if (form.email === '' || form.password === '') {
+    throw new Error('Поля не могут быть пустыми')
+  }
+  if (form.password.length < 8) {
+    throw new Error('Пароль должен содержать не менее 8 символов')
+  }
+}
+
+export { validateRegisterData, validateLoginData }
