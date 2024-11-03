@@ -27,7 +27,7 @@ onMounted(() => {
   <div class="app">
       <Header />
 
-  <main class="px-8 py-6 bg-gray-100">
+  <main class="bg-gray-100">
     <RouterView />
   </main>
   <footer>

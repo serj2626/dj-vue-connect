@@ -1,26 +1,26 @@
-<script lang="ts" setup>
-
-</script>
-
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <main>
-    <div class="grid grid-cols-3 gap-12">
+  <main class="home">
+    <!-- <div class="grid grid-cols-3 gap-12">
       <div class="card">Сообщества</div>
       <div class="card">Музыка</div>
       <div class="card">Фотографии</div>
       <div class="card">Сообщества</div>
       <div class="card">Сообщества</div>
       <div class="card">Сообщества</div>
-    </div>
+    </div> -->
   </main>
 </template>
 <style scoped>
-.card{
-    @apply p-4 bg-white border border-gray-200 rounded-lg;
-
-    height: 200px;
-   
-
+.card {
+  @apply p-4 bg-white border border-gray-200 rounded-lg;
+  height: 200px;
 }
 
+.home{
+  height: 80vh;
+  background-image: url("@/assets/iStock.jpg");
+  background-size: cover;
+  background-position: center;
+}
 </style>
