@@ -1,59 +1,45 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <script lang="ts" setup>
-import axios from "axios";
-import { reactive } from "vue";
-import { useUserStore } from "@/stores/user";
-import { useRouter } from "vue-router";
-import { useToast } from "vue-toastification";
+import axios from 'axios'
+import { reactive } from 'vue'
+import { useUserStore } from '@/stores/user'
+import { useRouter } from 'vue-router'
+import { useToast } from 'vue-toastification'
+import type { IAuthForm } from '@/types/types'
+import { validateLoginData } from '@/validate'
 
-const toast = useToast();
+const toast = useToast()
 
-const router = useRouter();
-const userStore = useUserStore();
+const router = useRouter()
+const userStore = useUserStore()
 
-const form = reactive({
-  email: "",
-  password: "",
-});
-
-const validateForm = () => {
-  if (form.email === "" || form.password === "") {
-    toast.error("Поля не могут быть пустыми");
-    return false;
-  }
-  if (form.password.length < 8) {
-    toast.error("Пароль должен содержать не менее 8 символов");
-    return false;
-  }
-
-  return true;
-};
+const form = reactive<IAuthForm>({
+  email: '',
+  password: '',
+})
 
 async function submitForm() {
-  if (validateForm()) {
-    try {
-      const res = await axios.post("/api/login/", form);
-      userStore.setToken(res.data);
-      console.log(res.data.access);
+  try {
+    validateLoginData(form)
+    const res = await axios.post('/api/login/', form)
+    userStore.setToken(res.data)
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.access
+    form.email = ''
+    form.password = ''
 
-      axios.defaults.headers.common["Authorization"] =
-        "Bearer " + res.data.access;
-      form.email = "";
-      form.password = "";
-      
-
-      await axios
-        .get("/api/me/")
-        .then((response) => {
-          userStore.setUserInfo(response.data);
-          toast.success("Вход выполнен");
-          router.push("/feed");
-        })
-        .catch((error) => {
-          toast.error(`Ошибка при входе: ${error.response.data}`);
-        });
-    } catch {
-      toast.error("Неверная почта или пароль");
-    }
+    await axios
+      .get('/api/me/')
+      .then(response => {
+        userStore.setUserInfo(response.data)
+        toast.success('Вход выполнен')
+        router.push('/feed')
+      })
+      .catch(error => {
+        toast.error(`Ошибка при входе: ${error.response.data}`)
+      })
+  } catch (err) {
+    console.log(err)
+    toast.error(err)
   }
 }
 </script>
@@ -87,8 +73,7 @@ async function submitForm() {
               v-model="form.email"
               type="email"
               placeholder="Ваша почта"
-              class="w-full mt-2 py-4 px-6 border border-gray-200 
-              rounded-lg"
+              class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg"
             />
           </div>
 
@@ -98,15 +83,13 @@ async function submitForm() {
               v-model="form.password"
               type="password"
               placeholder="Ваш пароль"
-              class="w-full mt-2 py-4 px-6 border border-gray-200
-               rounded-lg"
+              class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg"
             />
           </div>
 
           <div>
             <button
-              class="py-4 px-6 bg-purple-600 text-white rounded-lg
-               hover:bg-purple-700"
+              class="py-4 px-6 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
             >
               Войти
             </button>

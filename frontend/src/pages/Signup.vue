@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script lang="ts" setup>
-import type { IRegisterForm } from '@/types/types'
+import type { IAuthForm } from '@/types/types'
 import { validateRegisterData } from '@/validate'
 import axios from 'axios'
 import { reactive } from 'vue'
@@ -10,29 +10,26 @@ import { useToast } from 'vue-toastification'
 const toast = useToast()
 const router = useRouter()
 
-const form = reactive<IRegisterForm>({
+const form = reactive<IAuthForm>({
   email: '',
   name: '',
   password: '',
   password2: '',
 })
 
-
-
 const submitForm = async () => {
-  if (validateRegisterData(form)) {
-    try {
-      await axios.post('/api/register/', { ...form })
-      toast.success('Аккаунт успешно создан')
-      form.email = ''
-      form.name = ''
-      form.password = ''
-      form.password2 = ''
-      router.push({ name: 'login' })
-    } catch (err) {
-      console.log(err)
-      toast.error('Ошибка при создании аккаунта')
-    }
+  try {
+    validateRegisterData(form)
+    await axios.post('/api/register/', { ...form })
+    toast.success('Аккаунт успешно создан')
+    form.email = ''
+    form.name = ''
+    form.password = ''
+    form.password2 = ''
+    router.push({ name: 'login' })
+  } catch (err) {
+    console.log(err)
+    toast.error('Ошибка при создании аккаунта')
   }
 }
 </script>
