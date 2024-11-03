@@ -9,13 +9,13 @@ import { useUserStore } from '@/stores/user'
 import { ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import ProfileCard from '@/components/ProfileCard.vue'
-import type { IPostList, IUserData } from '@/types/types'
+import type { IPost, IUserData } from '@/types/types'
 import PostCard from '@/components/PostCard.vue'
 
 const toast = useToast()
 const userStore = useUserStore()
 
-const posts = ref<IPostList[]>([])
+const posts = ref<IPost[]>([])
 const user = ref({} as IUserData)
 
 const status = ref<string>('')
