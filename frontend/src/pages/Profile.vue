@@ -12,7 +12,6 @@ import ProfileCard from '@/components/ProfileCard.vue'
 import type { IPostList, IUserData } from '@/types/types'
 import PostCard from '@/components/PostCard.vue'
 
-const route = useRoute()
 const toast = useToast()
 const userStore = useUserStore()
 
@@ -25,7 +24,7 @@ const body = ref('')
 
 async function getFeed() {
   try {
-    const { data } = await axios.get(`/api/posts/profile/${route.params.id}/`)
+    const { data } = await axios.get(`/api/posts/profile/${useRoute().params.id}/`)
     posts.value = data.posts
     user.value = data.user
     status.value = data.status
