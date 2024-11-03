@@ -1,59 +1,40 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <script lang="ts" setup>
-import axios from "axios";
-import { reactive } from "vue";
-import { useRouter } from "vue-router";
-import { useToast } from "vue-toastification";
+import type { IRegisterForm } from '@/types/types'
+import { validateRegisterData } from '@/validate'
+import axios from 'axios'
+import { reactive } from 'vue'
+import { useRouter } from 'vue-router'
+import { useToast } from 'vue-toastification'
 
-const toast = useToast();
-const router = useRouter();
+const toast = useToast()
+const router = useRouter()
 
-const form = reactive({
-  email: "",
-  name: "",
-  password: "",
-  password2: "",
-});
+const form = reactive<IRegisterForm>({
+  email: '',
+  name: '',
+  password: '',
+  password2: '',
+})
 
-const validateForm = () => {
-  if (
-    form.email === "" ||
-    form.name === "" ||
-    form.password === "" ||
-    form.password2 === ""
-  ) {
-    toast.error("Обязательные поля не могут быть пустыми");
-    return false;
-  }
 
-  if (form.password.length < 8) {
-    toast.error("Пароль должен содержать не менее 8 символов");
-    return false;
-  }
-
-  if (form.password !== form.password2) {
-    toast.error("Пароли не совпадают");
-    return false;
-  }
-
-  return true;
-};
 
 const submitForm = async () => {
-  if (validateForm()) {
+  if (validateRegisterData(form)) {
     try {
-      await axios.post("/api/register/", { ...form });
-      toast.success("Аккаунт успешно создан");
-      form.email = "";
-      form.name = "";
-      form.password = "";
-      form.password2 = "";
-      router.push({name: 'login'})
-    } catch(err) {
-      console.log(err);
-      toast.error("Ошибка при создании аккаунта");
+      await axios.post('/api/register/', { ...form })
+      toast.success('Аккаунт успешно создан')
+      form.email = ''
+      form.name = ''
+      form.password = ''
+      form.password2 = ''
+      router.push({ name: 'login' })
+    } catch (err) {
+      console.log(err)
+      toast.error('Ошибка при создании аккаунта')
     }
   }
-};
+}
 </script>
 
 <template>
@@ -120,7 +101,9 @@ const submitForm = async () => {
           </div>
 
           <div>
-            <button class="py-4 px-6 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+            <button
+              class="py-4 px-6 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+            >
               Зарегистрироваться
             </button>
           </div>
