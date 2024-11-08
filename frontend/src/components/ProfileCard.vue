@@ -1,42 +1,41 @@
 <script setup lang="ts">
-import { useUserStore } from "@/stores/user";
+import { useUserStore } from '@/stores/user'
+import type { IUserData } from '@/types/types'
 
 defineProps({
-  user: {
-    type: Object,
-    required: true,
-  },
-});
+  user: Object as () => IUserData,
+  status: String,
+})
 
-const store = useUserStore();
+const store = useUserStore()
 </script>
 <template>
   <div
     class="p-4 bg-white border border-gray-200 text-center rounded-lg relative"
   >
     <p
-      v-if="store.user.id === user.id"
+      v-if="store.user.id === user?.id"
       class="absolute top-2 right-2 text-xs text-white bg-orange-600 p-2 rounded-md"
     >
       Это Вы
     </p>
     <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full" />
     <p>
-      <strong>{{ user.name }}</strong>
+      <strong>{{ user?.name }}</strong>
     </p>
 
-    <div class="mt-6 flex space-x-8 justify-around">
-      <RouterLink :to="{ name: 'friends', params: { id: user.id } }">
+    <div class="my-6 flex space-x-8 justify-around">
+      <RouterLink :to="{ name: 'friends', params: { id: user?.id } }">
         <p
           class="text-xs text-gray-500 transition-all duration-100 ease-in hover:text-gray-900"
         >
-          {{ user.count_friends }} друзей
+          {{ user?.count_friends }} друзей
         </p>
       </RouterLink>
-      <p class="text-xs text-gray-500">{{ user.count_posts }} постов</p>
+      <p class="text-xs text-gray-500">{{ user?.count_posts }} постов</p>
     </div>
     <div
-      v-if="store.user.id === user.id"
+      v-if="store.user.id === user?.id"
       class="mt-6 flex space-x-8 justify-around"
     >
       <RouterLink :to="{ name: 'subscribers', params: { id: user.id } }">
@@ -55,7 +54,12 @@ const store = useUserStore();
       </RouterLink>
     </div>
 
-    <!-- <UIButton v-if="userStore.user.id !== user.id" class="w-full mt-6" :text="status" @click="sendFriendRequest" /> -->
+    <UIStatusButton
+      v-if="store.user.id !== user?.id"
+      :size="`md`"
+      :status="status"
+    >
+      {{ status }}
+    </UIStatusButton>
   </div>
 </template>
-<style scoped></style>
