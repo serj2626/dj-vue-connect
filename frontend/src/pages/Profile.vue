@@ -14,9 +14,9 @@ import PostCard from '@/components/PostCard.vue'
 
 const toast = useToast()
 const userStore = useUserStore()
-
-const posts = ref<IPost[]>([])
-const user = ref<IUserData[]>([])
+const route = useRoute()
+const posts = ref({} as IPost[])
+const user = ref({} as IUserData)
 
 const status = ref<string>('')
 
@@ -25,14 +25,14 @@ const body = ref<string>('')
 async function getFeed() {
   try {
     const { data } = await axios.get(
-      `/api/posts/profile/${useRoute().params.id}/`,
+      `/api/posts/profile/${route.params.id}/`,
     )
     posts.value = data.posts
     user.value = data.user
     status.value = data.status
     console.log(data)
-  } catch(err) {
-    console.log(err);
+  } catch (err) {
+    console.log(err)
     toast.error('Произошла ошибка при загрузке постов')
   }
 }
@@ -80,7 +80,11 @@ watchEffect(() => {
 <template>
   <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
     <div class="main-left col-span-1">
-      <ProfileCard :user="user" />
+      
+      <ProfileCard
+      :user="user"
+      :status="status"
+    />
     </div>
 
     <div class="main-center col-span-2 space-y-4">
@@ -109,14 +113,14 @@ watchEffect(() => {
         </form>
       </div>
 
-      <PostCard
-        v-if="posts.length > 0"
-        v-for="(post, index) in posts"
-        :key="index"
-        @delete="deletePost"
-        :id="post.id"
-      />
-
+      <div v-if="posts.length > 0">
+        <PostCard
+          v-for="(post, index) in posts"
+          :key="index"
+          @delete="deletePost"
+          :id="post.id"
+        />
+      </div>
       <fwb-alert v-else class="border-t-4 rounded-none" icon type="danger">
         Посты отсутствуют.
       </fwb-alert>
