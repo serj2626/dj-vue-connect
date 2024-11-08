@@ -1,80 +1,79 @@
 <script setup lang="ts">
-import axios from "axios";
-import { onMounted, reactive, ref, watchEffect } from "vue";
-import Confirm from "./Confirm.vue";
-import { useToast } from "vue-toastification";
+import axios from 'axios'
+import { reactive, ref, watchEffect } from 'vue'
+import Confirm from './Confirm.vue'
+import { useToast } from 'vue-toastification'
 
 const { id } = defineProps({
   id: {
     type: [Number, String],
     required: true,
   },
-});
-const showMenu = ref(false);
-const contentEdit = ref(false);
-const showConfirm = ref(false);
-const emit = defineEmits(["comment", "delete"]);
+})
+const showMenu = ref(false)
+const contentEdit = ref(false)
+const showConfirm = ref(false)
+const emit = defineEmits(['comment', 'delete'])
 
-const body = ref("");
+const body = ref('')
 
-const isLiked = ref(false);
-const toast = useToast();
+const isLiked = ref(false)
+const toast = useToast()
 const post = reactive({
-  id: "",
-  body: "",
-  created_at_formatted: "",
+  id: '',
+  body: '',
+  created_at_formatted: '',
   likes_count: 0,
   comments_count: 0,
-});
+})
 const author = reactive({
-  name: "",
-  id: "",
-  email: "",
-});
+  name: '',
+  id: '',
+  email: '',
+})
 
 const getPost = async () => {
   try {
-    const { data } = await axios.get(`/api/posts/detail/${id}/`);
-    console.log(data);
-    author.name = data.post.author.name;
-    author.id = data.post.author.id;
-    author.email = data.post.author.email;
+    const { data } = await axios.get(`/api/posts/detail/${id}/`)
+    console.log(data)
+    author.name = data.post.author.name
+    author.id = data.post.author.id
+    author.email = data.post.author.email
 
-    post.id = data.post.id;
-    post.body = data.post.body;
-    post.created_at_formatted = data.post.created_at_formatted;
-    post.likes_count = data.post.likes_count;
-    post.comments_count = data.post.comments_count;
+    post.id = data.post.id
+    post.body = data.post.body
+    post.created_at_formatted = data.post.created_at_formatted
+    post.likes_count = data.post.likes_count
+    post.comments_count = data.post.comments_count
 
-    isLiked.value = data.is_liked;
+    isLiked.value = data.is_liked
   } catch (e) {
-    toast.error("Произошла ошибка при загрузке поста");
+    toast.error('Произошла ошибка при загрузке поста')
   }
-};
+}
 
-const toggleLike = async (id) => {
+const toggleLike = async id => {
   try {
-    await axios.post(`/api/posts/detail/${id}/like/`);
-    getPost();
+    await axios.post(`/api/posts/detail/${id}/like/`)
+    getPost()
   } catch (error) {
-    toast.error("Произошла ошибка при постановке лайка");
+    toast.error('Произошла ошибка при постановке лайка')
   }
-};
+}
 
 const deletePost = async () => {
-  emit("delete", post.id);
-  showConfirm.value = false;
-
+  emit('delete', post.id)
+  showConfirm.value = false
 }
 
 const cancel = () => {
-  contentEdit.value = false;
-  showMenu.value = false;
-};
+  contentEdit.value = false
+  showMenu.value = false
+}
 
 watchEffect(() => {
-  getPost();
-});
+  getPost()
+})
 </script>
 <template>
   <div class="post p-4 bg-white border border-gray-200 rounded-lg">
@@ -96,7 +95,12 @@ watchEffect(() => {
       <p class="text-gray-600">{{ post.created_at_formatted }} назад</p>
     </div>
 
-    <p @change="body" class="overflow-hidden" :class="{ focus: contentEdit }" :contenteditable="contentEdit">
+    <p
+      @change="body"
+      class="overflow-hidden"
+      :class="{ focus: contentEdit }"
+      :contenteditable="contentEdit"
+    >
       {{ post.body }}
     </p>
 
@@ -200,9 +204,8 @@ watchEffect(() => {
   </div>
 </template>
 <style scoped>
-
-.text-wrap{
-    word-wrap: break-word
+.text-wrap {
+  word-wrap: break-word;
 }
 
 .focus {

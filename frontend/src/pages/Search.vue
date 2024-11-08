@@ -27,8 +27,8 @@ const submitForm = async () => {
     toast.error('Произошла ошибка при поиске')
   }
 }
-const allUsers = computed(() => users.value)
-const allPosts = computed(() => posts.value)
+const allUsers = computed<IUserData[]>(() => users.value)
+const allPosts = computed<IPost[]>(() => posts.value)
 onMounted(submitForm)
 </script>
 
@@ -39,8 +39,8 @@ onMounted(submitForm)
         <form @submit.prevent="submitForm" class="p-4 flex space-x-4">
           <UIInput v-model="query" placeholder="Поиск" />
 
-          <UIButton :size="`md`"
-            ><div class="flex items-center gap-2">
+          <UIButton :size="`md`">
+            <div class="flex items-center gap-2">
               <p>Найти</p>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -62,18 +62,10 @@ onMounted(submitForm)
       <div
         class="p-4 bg-white border border-gray-200 rounded-lg grid grid-cols-4 gap-4"
       >
-        <UserCard
-          v-for="user in allUsers"
-          :key="user.id"
-          :user="user"
-        />
+        <UserCard v-for="user in allUsers" :key="user.id" :user="user" />
       </div>
 
-      <PostCard
-        v-for="post in allPosts"
-        :key="post.id"
-        :id="post.id"
-      />
+      <PostCard v-for="post in allPosts" :key="post.id" :id="post.id" />
     </div>
 
     <div class="main-right col-span-1 space-y-4">
