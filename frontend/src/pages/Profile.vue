@@ -16,39 +16,42 @@ const toast = useToast()
 const userStore = useUserStore()
 
 const posts = ref<IPost[]>([])
-const user = ref({} as IUserData)
+const user = ref<IUserData[]>([])
 
 const status = ref<string>('')
 
-const body = ref('')
+const body = ref<string>('')
 
 async function getFeed() {
   try {
-    const { data } = await axios.get(`/api/posts/profile/${useRoute().params.id}/`)
+    const { data } = await axios.get(
+      `/api/posts/profile/${useRoute().params.id}/`,
+    )
     posts.value = data.posts
     user.value = data.user
     status.value = data.status
     console.log(data)
-  } catch {
+  } catch(err) {
+    console.log(err);
     toast.error('Произошла ошибка при загрузке постов')
   }
 }
 
-const sendFriendRequest = async () => {
-  try {
-    const res = await axios.post(`/api/friends/send-request/${user.id}`)
-    toast.success(res.data.message)
-  } catch (e) {
-    toast.error(e.response.data.message)
-  }
-}
+// const sendFriendRequest = async () => {
+//   try {
+//     const res = await axios.post(`/api/friends/send-request/${user.id}`)
+//     toast.success(res.data.message)
+//   } catch (e) {
+//     toast.error(e.response.data.message)
+//   }
+// }
 
-const deletePost = async id => {
+const deletePost = async (id: number) => {
   try {
     await axios.delete(`/api/posts/detail/${id}/`)
     toast.success('Пост успешно удален')
     await getFeed()
-  } catch (error) {
+  } catch {
     toast.error('Произошла ошибка при удалении поста')
   }
 }
@@ -101,7 +104,7 @@ watchEffect(() => {
               >Прикрепить изображение</a
             >
 
-            <UIButton :text="`Отправить`" />
+            <UIButton :size="`md`"> Создать </UIButton>
           </div>
         </form>
       </div>
