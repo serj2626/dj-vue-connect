@@ -3,15 +3,13 @@ import UIButton from './UI/UIButton.vue'
 import UIInput from './UI/UIInput.vue'
 import Trends from '../Trends.vue'
 import PeopleYouMayKnow from '../PeopleYouMayKnow.vue'
-import UIAcceptButton from './UI/UIAcceptButton.vue'
-import UIRejectButton from './UI/UIRejectButton.vue'
+import UIStatusButton from './UI/UIStatusButton.vue'
 
 const components = [
   { name: 'UIButton', component: UIButton },
   { name: 'Trends', component: Trends },
   { name: 'PeopleYouMayKnow', component: PeopleYouMayKnow },
-  { name: 'UIAcceptButton', component: UIAcceptButton },
-  { name: 'UIRejectButton', component: UIRejectButton },
+  { name: 'UIStatusButton', component: UIStatusButton },
   { name: 'UIInput', component: UIInput },
 ]
 
