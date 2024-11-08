@@ -21,3 +21,21 @@ export interface IPost {
   likes: string[]
   likes_count: number
 }
+
+export interface IUserStore {
+  isAuthenticated: boolean
+  id: string | null
+  name: string | null
+  email: string | null
+  access: string | null
+  refresh: string | null
+}
+export interface ISetUserInfo {
+  id: string
+  name: string
+  email: string
+}
+export interface ISetToken {
+  access: string
+  refresh: string
+}
