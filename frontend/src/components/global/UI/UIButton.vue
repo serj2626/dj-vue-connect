@@ -2,7 +2,6 @@
 type Size = 'sm' | 'md' | 'lg'
 
 interface IProps {
-  text: string
   size: Size
 }
 
