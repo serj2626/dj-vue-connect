@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import axios from "axios";
 import { onMounted, reactive, ref, watchEffect } from "vue";
 import Confirm from "./Confirm.vue";
