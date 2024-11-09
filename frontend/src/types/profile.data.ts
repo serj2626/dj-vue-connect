@@ -8,13 +8,13 @@ interface IProfileData {
 export const profileData: IProfileData[] = [
   {
     title: 'Написать',
-    name: 'home',
+    name: 'messages',
     color: '#74C0FC',
     class: 'fa-solid fa-envelope fa-xl',
   },
   {
     title: 'Друзья',
-    name: 'home',
+    name: 'friends',
     color: '#b4370e',
     class: 'fa-solid fa-user-group fa-xl',
   },
