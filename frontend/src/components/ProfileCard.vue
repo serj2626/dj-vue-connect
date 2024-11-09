@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user'
 import type { IUserData } from '@/types/types'
+import { profileData } from '@/types/profile.data'
 
 defineProps({
   user: Object as () => IUserData,
@@ -24,7 +25,18 @@ const store = useUserStore()
       <strong>{{ user?.name }}</strong>
     </p>
 
-    <div class="my-6 flex space-x-8 justify-around">
+    <div class="flex justify-center gap-8 my-10">
+      <i
+        v-for="item in profileData"
+        class="hover:scale-125 cursor-pointer transition-all duration-100 ease-in"
+        :key="item.title"
+        :class="item.class"
+        :style="{ color: item.color }"
+        :title="item.title"
+      ></i>
+    </div>
+
+    <!-- <div class="my-6 flex space-x-8 justify-around">
       <RouterLink :to="{ name: 'friends', params: { id: user?.id } }">
         <p
           class="text-xs text-gray-500 transition-all duration-100 ease-in hover:text-gray-900"
@@ -33,8 +45,8 @@ const store = useUserStore()
         </p>
       </RouterLink>
       <p class="text-xs text-gray-500">{{ user?.count_posts }} постов</p>
-    </div>
-    <div
+    </div> -->
+    <!-- <div
       v-if="store.user.id === user?.id"
       class="mt-6 flex space-x-8 justify-around"
     >
@@ -52,7 +64,7 @@ const store = useUserStore()
           Подписки
         </p>
       </RouterLink>
-    </div>
+    </div> -->
 
     <UIStatusButton
       v-if="store.user.id !== user?.id"
