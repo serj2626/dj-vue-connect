@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 type Size = 'sm' | 'md' | 'lg'
 
 type StatusFriend =
@@ -13,18 +14,28 @@ interface IProps {
   status: StatusFriend
 }
 
-const emit = defineEmits(['delete', 'sendRequest'])
+const emit = defineEmits(['delete', 'sendRequest', 'reset'])
 
-defineProps<IProps>()
+const { size, status } = defineProps<IProps>()
+
+const classColor = computed(() => ({
+  'bg-blue-600 hover:bg-blue-700': status === 'Вы подписаны',
+  'bg-yellow-400 hover:bg-yellow-500': status === 'Ваш подписчик',
+  'bg-green-600 hover:bg-green-700': status === 'Ваш друг',
+  'bg-purple-600 hover:bg-purple-700': status === 'Отправить заявку',
+}))
+
+const classSize = computed(() => ({
+  'text-sm py-2 px-3': size === 'sm',
+  'text-md py-4 px-6': size === 'md',
+  'text-lg py-6 px-8': size === 'lg',
+}))
 </script>
 <template>
   <button
-    :class="{
-      'text-sm py-2 px-3': size === 'sm',
-      'text-md py-4 px-6': size === 'md',
-      'text-lg py-6 px-8': size === 'lg',
-    }"
-    class="inline-block bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+    @click="emit('reset')"
+    :class="[classSize, classColor]"
+    class="inline-block w-full text-white rounded-lg"
   >
     <slot></slot>
   </button>
