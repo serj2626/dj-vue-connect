@@ -30,10 +30,20 @@ const classSize = computed(() => ({
   'text-md py-4 px-6': size === 'md',
   'text-lg py-6 px-8': size === 'lg',
 }))
+
+const submit = () => {
+  if (status === 'Отправить заявку') {
+    emit('sendRequest')
+  } else if (status === 'Ваш друг') {
+    emit('delete')
+  } else {
+    emit('reset')
+  }
+}
 </script>
 <template>
   <button
-    @click="emit('reset')"
+    @click="submit"
     :class="[classSize, classColor]"
     class="inline-block w-full text-white rounded-lg"
   >
